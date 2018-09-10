@@ -5,14 +5,18 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
+    public static bool isHovered = false;
+
+    public Transform defenderPrefab;
+
     [SerializeField] private Color hoverColor;
 
     private Material tileMat;
     private Color defaultColor;
+    private static Vector3 tilePosition = Vector3.zero;
+    private bool hasDefender = false;
 
-    private Vector2 tilePosition = Vector2.zero;
-
-    public Vector2 GetTilePosition()
+    public Vector3 GetTilePosition()
     {
         return tilePosition;
     }
@@ -24,21 +28,31 @@ public class Tile : MonoBehaviour
         hoverColor = hoverColor.HexToColor("#FFFFC8");
     }
 
-
-    void Update()
-    {
-
-    }
-
-
     private void OnMouseEnter()
     {
-        tileMat.color = hoverColor;
-        tilePosition = new Vector2(transform.localPosition.x, transform.localPosition.z);
+        isHovered = true;
+        tilePosition = new Vector4(transform.localPosition.x, -0.1f, transform.localPosition.z);
+        if (!hasDefender)
+            tileMat.color = hoverColor;
     }
 
     private void OnMouseExit()
     {
+        isHovered = false;
         tileMat.color = defaultColor;
+    }
+
+    private void OnMouseDown()
+    {
+        if (!hasDefender)
+        {
+            hasDefender = true;
+            Vector3 spawnPosition = GetTilePosition();
+            Transform defender = Instantiate(defenderPrefab, spawnPosition, defenderPrefab.rotation);
+            defender.SetParent(GameObject.Find("DefenderSpawner").transform);
+            print("Defender Installed");
+        }
+        else
+            print("Already Has a Defender");
     }
 }

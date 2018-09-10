@@ -5,10 +5,9 @@ using UnityEngine;
 
 public class EnemyScript : MonoBehaviour
 {
-    public float speed = 5f;
+    [SerializeField] private float speed = 5f;
 
     private Transform target;
-
     private int pathPointIndex = 0;
 
     void Start()
@@ -26,6 +25,11 @@ public class EnemyScript : MonoBehaviour
         {
             GetNextPoint();
         }
+    }
+
+    public void SetEnemySpeed(int _speed)
+    {
+        speed = _speed;
     }
 
     private void GetNextPoint()
@@ -51,5 +55,4 @@ public class EnemyScript : MonoBehaviour
     {
         return target.localPosition - transform.localPosition;
     }
-
 }
