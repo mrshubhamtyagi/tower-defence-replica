@@ -4,24 +4,27 @@ using UnityEngine;
 
 public class Defender : MonoBehaviour
 {
+    public Transform bulletPrefab;
+    public Transform bulletPosition;
     public float rotationSpeed = 5f;
     public float range = 3f;
     public Color gizmoColor = Color.yellow;
 
-    public Transform target;
+    private Transform target;
 
-    private float shortestDistance;
-    private GameObject nearestEnemy = null;
+    private float fireRate = 0.5f;
+    private float fireCountdown = 0;
 
     private void Start()
     {
-        shortestDistance = range * 2;
         InvokeRepeating("GetNearestTarget", 0f, 0.1f);
     }
 
     void GetNearestTarget()
     {
         GameObject[] enemys = GameObject.FindGameObjectsWithTag("Enemy");
+        float shortestDistance = Mathf.Infinity;
+        GameObject nearestEnemy = null;
         foreach (GameObject enemy in enemys)
         {
             // get the distance to enemy
@@ -46,8 +49,13 @@ public class Defender : MonoBehaviour
     {
         if (target == null)
             return;
-        else
-            FollowTarget(target);
+
+        FollowTarget(target);
+        if (Input.GetKey(KeyCode.Space))
+        {
+            Transform bullet = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity);
+            bullet.GetComponent<Bullet>().target = target;
+        }
     }
 
     private void FollowTarget(Transform _target)
@@ -57,7 +65,7 @@ public class Defender : MonoBehaviour
         // get the rotation from the enemy direction
         Quaternion _lookRotation = Quaternion.LookRotation(_direction);
         // convert the rotation(Quaternion) to Vector3 to only use the Y-Axis
-        Vector3 _rotation = _lookRotation.eulerAngles;
+        Vector3 _rotation = Quaternion.Lerp(transform.rotation, _lookRotation, rotationSpeed * Time.deltaTime).eulerAngles;
         // set the transform rotation (Y-axis only)
         transform.rotation = Quaternion.Euler(0, _rotation.y, 0);
     }
