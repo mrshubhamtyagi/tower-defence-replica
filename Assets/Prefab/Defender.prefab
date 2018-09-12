@@ -272,9 +272,10 @@ MonoBehaviour:
   bulletPrefab: {fileID: 4892562411898018, guid: 55e78d8d818c8411a87d006a7e5eec6d,
     type: 2}
   bulletPosition: {fileID: 4038704729914066}
-  rotationSpeed: 5
+  rotationSpeed: 20
   range: 3
   gizmoColor: {r: 0.9780209, g: 1, b: 0, a: 1}
+  fireRate: 2
 --- !u!136 &136263925619696874
 CapsuleCollider:
   m_ObjectHideFlags: 1

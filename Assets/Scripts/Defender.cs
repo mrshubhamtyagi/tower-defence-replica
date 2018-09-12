@@ -9,11 +9,10 @@ public class Defender : MonoBehaviour
     public float rotationSpeed = 5f;
     public float range = 3f;
     public Color gizmoColor = Color.yellow;
+    public float fireRate = 0.5f;
 
     private Transform target;
-
-    private float fireRate = 0.5f;
-    private float fireCountdown = 0;
+    private float fireCountdown = 0f;
 
     private void Start()
     {
@@ -51,11 +50,19 @@ public class Defender : MonoBehaviour
             return;
 
         FollowTarget(target);
-        if (Input.GetKey(KeyCode.Space))
+
+        if (fireCountdown <= 0)
         {
-            Transform bullet = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity);
-            bullet.GetComponent<Bullet>().target = target;
+            Shoot();
+            fireCountdown = 1f / fireRate;
         }
+        fireCountdown -= Time.deltaTime;
+    }
+
+    private void Shoot()
+    {
+        Transform bullet = Instantiate(bulletPrefab, bulletPosition.position, Quaternion.identity);
+        bullet.GetComponent<Bullet>().Chase(target);
     }
 
     private void FollowTarget(Transform _target)

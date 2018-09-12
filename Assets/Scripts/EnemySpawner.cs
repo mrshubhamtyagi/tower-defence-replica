@@ -82,7 +82,7 @@ public class EnemySpawner : MonoBehaviour
 public class Wave
 {
     public GameObject enemyType;
-    [Range(1, 20)] public int enemyCount = 1;
+    [Range(1, 30)] public int enemyCount = 1;
     [Range(.3f, 2f)] public float timeBtwEachEnemy = 0.3f;
     [Range(3, 10)] public int enemySpeed = 5;
     [Range(1, 10)] public int nextwaveTime = 3;
